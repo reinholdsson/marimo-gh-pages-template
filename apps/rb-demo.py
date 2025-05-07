@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.13.6"
-app = marimo.App(width="medium", layout_file="layouts/rb-demo.grid.json")
+app = marimo.App(width="medium")
 
 
 @app.cell
