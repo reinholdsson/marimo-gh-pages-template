@@ -31,7 +31,7 @@ def _():
 
     # example from rb webpage
     url = str(mo.notebook_location() / "public" / "statistik-for-svenska-bankgrupper.xlsx")
-    df = pl.read_excel(url, sheet_name="Immediate counterparty")
+    df = pl.read_excel(url, sheet_name="Immediate counterparty", engine="openpyxl")
     df.head()
     return (mo,)
 

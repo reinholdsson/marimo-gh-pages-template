@@ -3,4 +3,4 @@ numpy
 altair
 pandas
 polars
-fastexcel
+openpyxl
