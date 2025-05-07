@@ -22,7 +22,7 @@ def _(mo):
         <img src="public/logo.png" width="200" />
 
         This notebook demonstrates a simple interactive visualization using Altair.
-        Try selecting the points!
+        Try selecting the points!!
         """
     )
     return
