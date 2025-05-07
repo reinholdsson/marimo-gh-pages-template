@@ -5,19 +5,35 @@ app = marimo.App(width="medium")
 
 
 @app.cell
-def _():
-    import polars as pl
-    from urllib.request import Request, urlopen
+def _(mo):
+    mo.md(
+        r"""
+    ## Demo
 
-    req = Request(
-        url='https://www.riksbank.se/globalassets/media/statistik/iris/statistik-for-svenska-bankgrupper.xlsx', 
-        headers={'User-Agent': 'Mozilla/5.0'}
+    Data is downloaded from, haven't yet solved how to read directly from url using pyodide:
+
+    https://www.riksbank.se/sv/statistik/rapportering-av-internationell-bankstatistik-iris/svenska-bankgrupper/
+    """
     )
-
-    df = pl.read_excel(urlopen(req).read(), sheet_name="Immediate counterparty")
-
-    df.head()
     return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""Below is a table of data:""")
+    return
+
+
+@app.cell
+def _():
+    import marimo as mo
+    import polars as pl
+
+    # example from rb webpage
+    url = str(mo.notebook_location() / "public" / "statistik-for-svenska-bankgrupper.xlsx")
+    df = pl.read_excel(url, sheet_name="Immediate counterparty")
+    df.head()
+    return (mo,)
 
 
 if __name__ == "__main__":
