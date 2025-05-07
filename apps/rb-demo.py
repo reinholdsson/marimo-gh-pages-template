@@ -14,13 +14,18 @@ async def _():
 
 @app.cell
 def _(mo):
+    mo.md(r"""## Demo""")
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(
         r"""
-    ## Demo
+    /// admonition | Note.
 
-    Data is downloaded from, haven't yet solved how to read directly from url using pyodide:
-
-    https://www.riksbank.se/sv/statistik/rapportering-av-internationell-bankstatistik-iris/svenska-bankgrupper/
+    This is only an example plot for demo purpose. See [here](https://www.riksbank.se/sv/statistik/rapportering-av-internationell-bankstatistik-iris/svenska-bankgrupper/) for more info about the data.
+    ///
     """
     )
     return
@@ -39,9 +44,39 @@ def _():
 
     # example from rb webpage
     url = str(mo.notebook_location() / "public" / "statistik-for-svenska-bankgrupper.xlsx")
-    df = pl.read_excel(url, sheet_name="Immediate counterparty", engine="openpyxl")
-    df.head()
-    return (mo,)
+    df = pl.read_excel(url, sheet_name="Immediate counterparty", engine="openpyxl").with_columns(
+        pl.col("Reference Period").dt.strftime("%Y Q%q")
+    )
+    df
+    return df, mo, pl
+
+
+@app.cell
+def _(df, mo):
+    ref_vals = df.get_column("Reference Period").sort().to_list()
+    ref_period = mo.ui.dropdown(value=max(ref_vals), options=ref_vals, label="Reference period", allow_select_none=False)
+    ref_period
+    return (ref_period,)
+
+
+@app.cell
+def _(df, mo, pl, ref_period):
+    import altair as alt
+
+    df_agg = df.filter(
+        pl.col("Reference Period") == ref_period.value,
+        pl.col("Counterparty Country").str.len_chars() == 2,
+        ~pl.col("Counterparty Country").is_in(["SE"])
+    ).group_by("Counterparty Country").agg(pl.col("Amount in MSEK").sum()).sort("Amount in MSEK", descending=True).head(10)
+
+    chart = mo.ui.altair_chart(alt.Chart(df_agg).mark_bar().encode(
+        alt.X('Amount in MSEK'),
+        #y='Counterparty Country',
+        alt.Y('Counterparty Country').sort('-x')
+    ))
+    chart
+
+    return
 
 
 if __name__ == "__main__":
