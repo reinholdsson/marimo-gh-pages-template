@@ -28,6 +28,7 @@ def _(mo):
 def _():
     import marimo as mo
     import polars as pl
+    import fastexcel
 
     # example from rb webpage
     url = str(mo.notebook_location() / "public" / "statistik-for-svenska-bankgrupper.xlsx")
