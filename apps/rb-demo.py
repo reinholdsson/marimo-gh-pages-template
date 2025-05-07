@@ -1,7 +1,7 @@
 import marimo
 
 __generated_with = "0.13.6"
-app = marimo.App(width="medium")
+app = marimo.App(width="medium", layout_file="layouts/rb-demo.grid.json")
 
 
 @app.cell
@@ -74,6 +74,16 @@ def _(df, mo, pl, ref_period):
     ))
     chart
 
+    return chart, df_agg
+
+
+@app.cell
+def _(chart, df_agg):
+    if len(chart.value) == 0:
+        res = df_agg
+    else:
+        res = chart.value.head()
+    res
     return
 
 
