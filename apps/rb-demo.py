@@ -5,6 +5,14 @@ app = marimo.App(width="medium")
 
 
 @app.cell
+async def _():
+    # required for WASM notebooks
+    import micropip
+    await micropip.install("openpyxl")
+    return
+
+
+@app.cell
 def _(mo):
     mo.md(
         r"""
