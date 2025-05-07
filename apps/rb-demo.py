@@ -44,10 +44,8 @@ def _():
 
     # example from rb webpage
     url = str(mo.notebook_location() / "public" / "statistik-for-svenska-bankgrupper.xlsx")
-    df = pl.read_excel(url, sheet_name="Immediate counterparty", engine="openpyxl").with_columns(
-        pl.col("Reference Period").dt.strftime("%Y Q%q")
-    )
-    df
+    df = pl.read_excel(url, sheet_name="Immediate counterparty", engine="openpyxl")
+    #df
     return df, mo, pl
 
 
