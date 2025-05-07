@@ -2,3 +2,5 @@ marimo
 numpy
 altair
 pandas
+polars
+fastexcel
