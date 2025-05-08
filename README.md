@@ -50,3 +50,12 @@ python -m http.server -d _site
 ```
 
 This will serve the site at `http://localhost:8000`.
+
+## Test web assembly notebook locally
+
+```bash
+rm -rf .tmp
+marimo export html-wasm apps/exchange-rates.py -o .tmp --mode edit
+python -m http.server -d .tmp
+
+```
